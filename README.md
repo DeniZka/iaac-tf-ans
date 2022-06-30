@@ -3,6 +3,8 @@ Terraform &amp; Ansible infrastucture
 
 
 #### before start
-edit `prepare.sh` set token id in `TID` and token secred in `TPWD`
+add needed `ssh-key` into `main.tf`
 
+export variables properly run interactive script with
+`source ./prepare.sh`
 

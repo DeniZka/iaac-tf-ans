@@ -3,22 +3,24 @@
 #-----setup start------------
 #BEFORE RUN SETUP THESE
 #set your  pve  api token
-TID="terraform-prov@pve!mytoken"
+TID='terraform-prov@pve!mytoken'
 TPWD="secret"
-
-#set your username (SEEMS NOT NEEDED)
-UNAME="username"
-UPWD="secret"
 
 #------setup done-------------
 
+echo 'Enter proxmox API token ID (blah-blah@pve!blah-blah)'
+echo 'Press [Return] to skip'
+read TID
+echo 'Enter proxmox API token secret (too-hard-to-hack-hash-code)'
+echo 'Press [Return] to skip'
+read TPWD
 
 
 #check terraform plugin exists
 PATH_TO_CHECK=~/.terraform.d/plugins/my.pc.local/telmate/proxmox/2.9.10/linux_amd64/
 FILE_TO_CHECK="$PATH_TO_CHECK"/terraform-provider-proxmox_v2.9.10
 if [[ -f "$FILE_TO_CHECK" ]]; then
-  echo "proxmox file exists"
+  echo "proxmox file exists skip"
 else
   echo "proxmox file not exists downloading"
   mkdir -p "$PATH_TO_CHECK"
@@ -28,42 +30,29 @@ else
 fi
 
 
-
-#most default shell rc
-SHELLRC='.bashrc'
-#swhitch to most beauty shell rc
-if [[ "$SHELL" == *"zsh"* ]]
-then
-  SHELLRC='.zshrc'
-fi
-
-echo Your shell RC is $SHELLRC
+echo exporting terraform and ansible configurationtions
 
 #setup RC file
-if ! grep -q "PM_USER" ~/$SHELLRC; then
-  echo SKIP USER SET
-  #echo "export PM_USER=\"$UNAME\"" >> ~/$SHELLRC
-fi
-
-if ! grep -q "PM_PASSWORD" ~/$SHELLRC; then
-  echo SKIP PWD SET
-  #echo "export PM_PASSWORD=\"$UPWD\"" >> ~/$SHELLRC
-fi
-
-if ! grep -q "PM_API_TOKEN_ID" ~/$SHELLRC; then
+echo SKIP USER SET
+#echo "export PM_USER=\"$UNAME\"" >> ~/$SHELLRC
+echo SKIP PWD SET
+#echo "export PM_PASSWORD=\"$UPWD\"" >> ~/$SHELLRC
+if [ -z $TID ]; then
+  echo skip pve api id
+else
   echo Adding PVE API ID
-  echo "export PM_API_TOKEN_ID='$TID'" >> ~/$SHELLRC
+  export PM_API_TOKEN_ID=$TID
 fi
-
-if ! grep -q "PM_API_TOKEN_SECRET" ~/$SHELLRC; then
+if [ -z $TPWD ]; then
+  echo skip pve api secret
+else
   echo Adding PVE API TOKEN
-  echo "export PM_API_TOKEN_SECRET=\"$TPWD\"" >> ~/$SHELLRC
+ export PM_API_TOKEN_SECRET=$TPWD
 fi
+echo Adding ansible local inventory
+export ANSIBLE_INVENTORY=`pwd`/hosts
+echo Adding andible ssh key accepting
+export ANSIBLE_HOST_KEY_CHECKING=False
 
-#STUP ANSIBLE INVENTORY FILE TO LOCAL
-if ! grep -q "ANSIBLE_INVENTORY" ~/$SHELLRC; then
-  echo Adding ansible local inventory
-  echo "export ANSIBLE_INVENTORY=`pwd`/hosts" >> ~/$SHELLRC
-fi
 
 echo Done
