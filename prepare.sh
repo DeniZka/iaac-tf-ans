@@ -36,7 +36,7 @@ fi
 
 if ! grep -q "PM_API_TOKEN_ID" ~/$SHELLRC; then
   echo Adding PVE API ID
-  echo "export PM_API_TOKEN_ID=\"$TID\"" >> ~/$SHELLRC
+  echo "export PM_API_TOKEN_ID='$TID'" >> ~/$SHELLRC
 fi
 
 if ! grep -q "PM_API_TOKEN_SECRET" ~/$SHELLRC; then
