@@ -1,2 +1,2 @@
 
-ansible -i ./hosts nodes -m ping
+ansible-playbook -i $ANSIBLE_INVENTORY ansible/test.yml

@@ -37,6 +37,10 @@ resource "proxmox_lxc" "test-debian1" {
     memory       = 2048
     cores        = 2
 
+    #startup
+    start        = true
+    #onboot       = true
+
     #generate hash openssl passwd -6 <my_password>
     #now: useruser
     password     = "$6$5Gxkjto7LXjCQCgy$oX4nsM/mJYyrHTTPatXPWeEu.gGu8FCA5Nb8pq6NxkYlUp8IiY2W.Gy7pygr4kNIViy4V.vzoZ.x5X.JNOqiq/"
@@ -66,7 +70,7 @@ resource "proxmox_lxc" "test-debian1" {
 
     provisioner "local-exec" {
         #command = "ansible-playbook -i ans-test provision.yml"
-	command = "ansible -i ./hosts nodes -m ping"
+	command = "ansible -i .ansible/inventory/hosts nodes -m ping"
     }
 
 }

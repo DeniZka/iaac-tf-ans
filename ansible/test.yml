@@ -1,0 +1,7 @@
+- name: hello
+  hosts: nodes
+  tasks:
+    - name: install mc
+      apt:
+        name: mc
+        state: present
