@@ -65,9 +65,9 @@ resource "proxmox_lxc" "test-debian1" {
     }
 
     provisioner "local-exec" {
-        #command = "ansible-playbook -i ans-test provision.yml"
-        #command = "echo $ANSIBLE_INVENTORY"
-        command = "ansible -i $ANSIBLE_INVENTORY nodes -m ping"
+        #command = "ansible nodes -m ping"
+        command = "ansible-playbook ../ansible/test.yml"
+    
     }
 
 }
