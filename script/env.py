@@ -20,7 +20,7 @@ sl = ''
 with open('./script/.env', 'r') as f:
     sl = f.readlines()
     
-print(sl)
+#print(sl)
 for l in sl:
 
     kv = l.split("=")

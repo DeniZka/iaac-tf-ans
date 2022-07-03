@@ -48,11 +48,7 @@ resource "proxmox_lxc" "test-debian1" {
     # de home pc 
     # proxmox
     # denis job pc
-    ssh_public_keys = <<-EOT
-        ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCov2nf2nZcAIH+KlFgaCsTwwVdNASW3H9IFjC7+INVprIEWmIQ7kZEv47xhLqL5E+50ePJ+qTkr5AJ3gwVKOgGo9FYWOdO8ml7A5dtI+pF0bQapcIuEIT3wU55gAGVL1pwW2X9+sJXCxCKGZhgyGLK7qeZsAAK8ucm63QOisnErDPB3FkCyCrTPLW4cF0s+h9GezK7nZAlY9nY3Sb1kKGlOSNY9P33O8M9G1lQ7Hcc4hfxWcpS/49pVPStA+rEDjsG6NIa4dtXFLxfmJTTtDHDNAhfaoY4KFO3cdEXvuHHUjH2tZEL4HUqHKtUwr5n5Txyv3Fu4j5qt/DCgYJX2WQn85EgAguu9Nwh5gpB0cCD3+qGi4zo28dwKjrZ7MPzQaOiM8fySbwwpe+ABJVJDF5bk12gw0gp1kHYDrOS78Pmu8nSekeofox9tgVh82uufOVLP9Qm14sulzm1119P2EBs6O/ntIZYEDREAGsCoBiu5xgAlkwNx/1KT9q9uox6SS8= denis@ibook
-        ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCcTpme3YYXzDKfcIHi9kPs88pRvatv+pwWstW1ia/PLyFbdrEoDDRZNuTTW2/5awsIaodW18j7ZmnRVKaICNJRdA21qU6uQcaUyf74qZHRVN06zYRYdyeVpfjaI3jRIwqT/f9t6GLCzFgxy36FWYHGUM1cYKWzIbPbLisQLiZTq3If1tKpO2qH1ybIlxIlKsHJKt87d8uLi+LYHq82uUJ3kQHGI9kulse9I1SiLbjeuJTZLb2LhxNrICE4YNZqN+DpavUOZ+6o1KYWE4Cyao2uzE0u00j3eGghmKvljWk5Q9OYtOkfaA/XYvAmFg16bSwj0TE4Q/iq0egPs0sonHgF root@pve
-        ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC/plA4VbXD/l2zUbXL/bSpem8ITNuODHlPwlW/LPyAqKbfTaQqvLlngVVx6LaPpmlYoMhS6x53fqf6DRwlt/NgU9AeTs9wVMNwI9WK4nMd5xifqO+1SOoNDFlwBvUMNqciPMqioOMXCDE5PE2R8e/cQeQZ+aZEu5JLpr0Or9zlag5IuHUiYJ6R+KWCw9pPjXnG6TjUjvVdPCvIg8iJoQFNTIo4poMgvv7+Y8nFFWSfFeMwhiNa46SrCpSAnOEeSVkacAR6HVYNkfBG7rKCKxWj6WmPAALpOAqFyKuiLhvTrFH8SVx28FqgWU+zk1MRoSecb/935Mqfk6V114rQUeh/ user@ARM-00
-    EOT
+    ssh_public_keys = file("id_rsa.keys")
 
     rootfs {
         storage = "local-btrfs"
