@@ -6,11 +6,8 @@ Terraform &amp; Ansible infrastucture
 2. (terraform)[https://learn.hashicorp.com/tutorials/terraform/install-cli]
 
 ### before start
-add your node `ssh-key` into `main.tf`
+Run `make configure` to prepare environment
 
-run 
-```
-make configure
-make apply
-```
+### apply IaaC
+Run `make apply` for terraform and ansible
 
