@@ -30,10 +30,10 @@ provider "proxmox" {
 
 resource "proxmox_lxc" "test-debian1" {
     target_node  = "pve"
-    hostname     = "deb-11"
+    hostname     = "nginx"
     ostemplate   = "local-btrfs:vztmpl/debian-11-standard_11.3-1_amd64.tar.zst"
     onboot       = true
-    vmid         = 104
+    vmid         = 100
     memory       = 2048
     cores        = 2
 
@@ -55,18 +55,23 @@ resource "proxmox_lxc" "test-debian1" {
         size = "8G"    
     }
 
-
     network {
         name = "eth0"
         bridge = "vmbr0"
-        ip = "dhcp"
-        #ip = "172.16.0.1/24"
+        #ip = "dhcp"
+        ip = "172.16.0.100/24"
+        gw = "172.16.0.11"
         ip6 = "auto"
+        
     }
+    #resolving by name
+    #nameserver = "172.16.0.11"
+    #searchdomain = "lan"
 
     provisioner "local-exec" {
         #command = "ansible nodes -m ping"
-        command = "ansible-playbook ../ansible/test.yml"
+        #need to sleep a bit before machine available
+        command = "sleep 10 && ansible-playbook ../ansible/test.yml"
     
     }
 

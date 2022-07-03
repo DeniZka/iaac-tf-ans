@@ -14,9 +14,12 @@ test:
 #test env reading
 print:
 #	./test.sh
-	/usr/bin/bash /usr/bin/echo $ANSIBLE_INVENTORY
+	echo $(ANSIBLE_HOST_KEY_CHECKING)
 	
 all: configure apply
+
+nginx-distro:
+	ansible-playbook ansible/pve-nginx-distro.yml
 
 configure: configure-ssh-jump configure-id-rsa-pub configure-env configure-tf 
 
@@ -35,7 +38,7 @@ configure-tf:
 configure-id-rsa-pub:
 	./script/add-id-rsa.sh
 
-apply:
+apply: nginx-distro
 	terraform -chdir=$(tf) apply
 
 destroy:

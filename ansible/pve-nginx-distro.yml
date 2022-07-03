@@ -1,0 +1,10 @@
+- name: check nginx clx exists
+  hosts: proxy
+  tasks: 
+    - name: check nginx exists
+      stat:
+        path: /var/lib/pve/local-btrfs/template/cache/debian-10-turnkey-nginx-php-fastcgi_16.1-1_amd64.tar.gz
+      register: got_nginx
+    - name:
+      shell: pveam download local-btrfs debian-10-turnkey-nginx-php-fastcgi_16.1-1_amd64.tar.gz
+      when: not got_nginx.stat.exists  

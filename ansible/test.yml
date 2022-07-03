@@ -1,7 +1,9 @@
 - name: hello
   hosts: nodes
   tasks:
-    - name: install mc
+    - name: install nginx
       apt:
-        name: mc
+        name: nginx certbot python3-certbot-nginx python3-acme python3-certbot python3-mock python3-openssl python3-pkg-resources python3-pyparsing python3-zope.interface
         state: present
+    - name: configure certbot
+      shell: certbot --test-cert --nginx -w /var/www/html/ -d bms-devops.ru --register-unsafely-without-email -n --agree-tos --http-01-port 81
