@@ -1,10 +1,16 @@
 # iaac-tf-ans
 Terraform &amp; Ansible infrastucture
 
+### requiered packages
+1. (ansible)[https://docs.ansible.com/ansible/latest/installation_guide/installation_distros.html]
+2. (terraform)[https://learn.hashicorp.com/tutorials/terraform/install-cli]
 
-#### before start
-add needed `ssh-key` into `main.tf`
+### before start
+add your node `ssh-key` into `main.tf`
 
-export variables properly run interactive script with
-`source ./prepare.sh`
+run 
+```
+make configure
+make apply
+```
 

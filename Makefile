@@ -1,21 +1,27 @@
 tf=./terraform
-
+SHELL:=/usr/bin/bash
 #read environment variables there
+$(shell touch ./script/.env)
 include ./script/.env
 #export environment variables for bash scripts
 export $(shell sed 's/=.*//' ./script/.env)
-
+#ifneq (,$(wildcard ./script/.env)
+#	include ./script/.env
+#	export
+#endif
+test:
+	env
 #test env reading
 print:
-	./test.sh
-	echo $(TEST)
-
+#	./test.sh
+	/usr/bin/bash /usr/bin/echo $ANSIBLE_INVENTORY
+	
 all: configure apply
 
 configure: configure-env configure-tf 
 
 configure-env:
-	touch ./scritp/.env
+#	touch ./scritp/.env
 	./script/env.py
 
 configure-tf:
@@ -24,6 +30,9 @@ configure-tf:
 
 apply:
 	terraform -chdir=$(tf) apply
+
+destroy:
+	terraform -chdir=$(tf) destroy
 
 clean:
 	rm -rf $(tf)/*.log

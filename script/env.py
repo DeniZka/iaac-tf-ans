@@ -1,49 +1,64 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 import os
-import dotenv
+import re
+import dotenv #this sux, drop it
 
 print('Setting UP .env file')
 
-fenv = dotenv.find_dotenv()
-print(fenv)
-dotenv.load_dotenv(fenv)
 
-tid = os.environ.get('PM_API_TOKEN_ID')
-tse = os.environ.get('PM_API_TOKEN_SECRET')
+#prepare regular expressions
+d = {
+    'PM_API_TOKEN_ID': '',
+    'PM_API_TOKEN_SECRET': '',
+    'ANSIBLE_INVENTORY': os.getcwd() + '/ansible/inventory/hosts',
+    'ANSIBLE_HOST_KEY_CHECKING': 'False'
+}
 
+
+#read .env file
+sl = ''
+with open('./script/.env', 'r') as f:
+    sl = f.readlines()
+    
+print(sl)
+for l in sl:
+
+    kv = l.split("=")
+    if kv[0] == 'PM_API_TOKEN_ID':
+        d['PM_API_TOKEN_ID'] = kv[1].strip()
+    elif kv[0] == 'PM_API_TOKEN_SECRET':
+        d['PM_API_TOKEN_SECRET'] = kv[1].strip()
 
 
 print ('Enter proxmox API token ID (blah-blah@pve!blah-blah)')
-if tid :
-    print('Now: ', tid) #FIXME REMOVE
+if d['PM_API_TOKEN_ID'] :
+    print('Now: ', d['PM_API_TOKEN_ID']) #FIXME REMOVE
     #print ('Now: ', tid[0:3], '..', tid[-3:]) #kond of secure
 else:
     print ('token ID is empty')
 
 s = input('Press [Return] to skip: ')
 if s :
-    dotenv.set_key(fenv, "PM_API_TOKEN_ID", s)
+    d['PM_API_TOKEN_ID'] = s
 else:
     print('skipped')
 
 
 print ('Enter proxmox API token secret (too-hard-to-hack-hash-code)')
-if tse:
-    print ('Now: ', tse)
+if d['PM_API_TOKEN_SECRET']:
+    print ('Now: ', d['PM_API_TOKEN_SECRET'])
 else:
     print ('token Secret is empty')
 s = input('Press [Return] to skip: ')
 if s :
-    dotenv.set_key(fenv, "PM_API_TOKEN_SECRET", s)
+    d['PM_API_TOKEN_SECRET'] = s
 else:
     print('skipped')
 
-#ansible configurations
-cwd = os.getcwd()
-print('Setting up Ansible inventory file')
-dotenv.set_key(fenv, "ANSIBLE_INVENTORY", cwd + '/ansible/inventory/hosts')
-print('Disable Ansible host key checking')
-dotenv.set_key(fenv, "ANSIBLE_HOST_KEY_CHECKING", "False")
+#write back
+with open('./script/.env', 'w') as f:
+    for key, value in d.items():    
+        f.write("%s=%s\n" % (key, value))
 
 print('.env configuration done!')
 
