@@ -18,7 +18,11 @@ print:
 	
 all: configure apply
 
-configure: configure-id-rsa-pub configure-env configure-tf 
+configure: configure-ssh-jump configure-id-rsa-pub configure-env configure-tf 
+
+configure-ssh-jump:
+	echo "Ansible jump access for bms-devops.ru pve"
+	ssh-copy-id root@bms-devops.ru
 
 configure-env:
 #	touch ./scritp/.env
