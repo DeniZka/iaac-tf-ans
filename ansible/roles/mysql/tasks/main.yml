@@ -15,19 +15,35 @@
   environment:
     DEBIAN_FRONTEND: noninteractive
 
-- name: reconfigure to cluster
-  shell: sed -i 's/-[0-9]\+\.[0-9]\+/-cluster\0/g' /etc/apt/sources.list.d/mysql.list
+#seems no cluster needed, just replication
+#- name: reconfigure to cluster
+#  shell: sed -i 's/-[0-9]\+\.[0-9]\+/-cluster\0/g' /etc/apt/sources.list.d/mysql.list
   
 - name: update apt
   shell: apt update
   
-- name: install mysql cluster
+- name: install mysql server
   apt:
-    pkg: mysql-cluster-community-server
+    pkg: mysql-community-server
+    #
+    #mysql-cluster-community-server
   environment:
     DEBIAN_FRONTEND: noninteractive
     
+#pick master of slave config
+- name: add mysqld {{ db_kind }} config
+  copy: 
+    src: mysqld_{{ db_kind }}.cnf
+    dest: /etc/mysql/mysql.conf.d/mysql.cnf
+  #when: db_kind == "master"  
+
+- name: restart mysql
+  shell: systemctl restart mysql
+
+#TODO: execute SQL SETUP user password & replication  
+  
 #TODO: change root password
+#https://www.youtube.com/watch?v=RkbIqbXCWqI master-slave, master-master config
 
 
   

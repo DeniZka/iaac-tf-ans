@@ -1,3 +1,5 @@
 - hosts: db01
-  roles:
+  vars:
+    db_kind: master
+  roles: 
     - mysql
