@@ -21,7 +21,7 @@ all: configure apply
 nginx-distro:
 	ansible-playbook ansible/pve-nginx-distro.yml
 
-configure: configure-ssh-jump configure-id-rsa-pub configure-env configure-tf 
+configure: configure-ssh-jump configure-id-rsa-pub configure-env configure-tf configure-mysql
 
 configure-ssh-jump:
 	echo "Ansible jump access for bms-devops.ru pve"
@@ -37,6 +37,9 @@ configure-tf:
 
 configure-id-rsa-pub:
 	./script/add-id-rsa.sh
+
+configure-mysql:
+	./script/mysql-get-last-repo.sh
 
 apply: 
     #nginx-distro

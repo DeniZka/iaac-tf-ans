@@ -12,7 +12,7 @@ d = {
     'PM_API_TOKEN_SECRET': '',
     'ANSIBLE_INVENTORY': os.getcwd() + '/ansible/inventory/hosts',
     'ANSIBLE_HOST_KEY_CHECKING': 'False',
-    'ANSIBLE_TIMEOUT': 60,
+    'ANSIBLE_TIMEOUT': 40,
     'ANSIBLE_ROLES_PATH': os.getcwd() + '/ansible/roles',
     'ANSIBLE_PLAYBOOK_DIR': os.getcwd() + '/ansible',
 }

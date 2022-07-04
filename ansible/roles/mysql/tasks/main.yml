@@ -1,0 +1,13 @@
+---
+# tasks file for mysql
+- name: prepare for mysql installation
+  apt:
+    pkg:
+      - gnupg
+      - lsb-release
+- name: download last release
+  shell: wget https://dev.mysql.com/get/{{ mysql_last_repo_deb }}
+#- name: 
+#  ansible.builtin.debconf:
+#    & dpkg -i {{ mysql_last_repo_deb }}
+  
