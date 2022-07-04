@@ -30,7 +30,7 @@ provider "proxmox" {
 
 resource "proxmox_lxc" "test-debian1" {
     target_node  = "pve"
-    hostname     = "nginx"
+    hostname     = "bms-devops.ru"
     ostemplate   = "local-btrfs:vztmpl/debian-11-standard_11.3-1_amd64.tar.zst"
     onboot       = true
     vmid         = 100
@@ -71,7 +71,7 @@ resource "proxmox_lxc" "test-debian1" {
     provisioner "local-exec" {
         #command = "ansible nodes -m ping"
         #need to sleep a bit before machine available
-        command = "sleep 10 && ansible-playbook ../ansible/test.yml"
+        command = "ansible-playbook $ANSIBLE_PLAYBOOK_DIR/nginx.yml"
     
     }
 

@@ -1,5 +1,6 @@
-- name: hello
-  hosts: nodes
+- hosts: nginx
+  roles:
+    - nginx
   tasks:
     - name: install nginx
       apt:

@@ -38,7 +38,8 @@ configure-tf:
 configure-id-rsa-pub:
 	./script/add-id-rsa.sh
 
-apply: nginx-distro
+apply: 
+    #nginx-distro
 	terraform -chdir=$(tf) apply
 
 destroy:

@@ -1,10 +1,9 @@
 [proxy]
-bms-devops.ru ansible_connection=ssh ansible_user=root
+bms-devops.ru ansible_user=root ansible_ssh_user=root
 
 [nodes]
-#nginx
-172.16.0.100 ansible_connection=ssh ansible_user=root
+nginx ansible_host=172.16.0.100 ansible_user=root ansible_ssh_user=root
 
 [nodes:vars]
-#skip yes on host checking and move it to null
-ansible_ssh_common_args='-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ProxyCommand="ssh -p 22 -W %h:%p -q root@bms-devops.ru"'
+#skip yes on host checking and move it to null and wait about minute for first time
+ansible_ssh_common_args='-o UserKnownHostsFile=/dev/null -o ProxyCommand="ssh -p 22 -W %h:%p -q root@bms-devops.ru"'
