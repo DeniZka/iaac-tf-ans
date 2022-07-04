@@ -5,9 +5,29 @@
     pkg:
       - gnupg
       - lsb-release
+      
 - name: download last release
   shell: wget https://dev.mysql.com/get/{{ mysql_last_repo_deb }}
-#- name: 
-#  ansible.builtin.debconf:
-#    & dpkg -i {{ mysql_last_repo_deb }}
+
+- name: install downloaded deb
+  apt:
+    deb: ./{{ mysql_last_repo_deb }}
+  environment:
+    DEBIAN_FRONTEND: noninteractive
+
+- name: reconfigure to cluster
+  shell: sed -i 's/-[0-9]\+\.[0-9]\+/-cluster\0/g' /etc/apt/sources.list.d/mysql.list
+  
+- name: update apt
+  shell: apt update
+  
+- name: install mysql cluster
+  apt:
+    pkg: mysql-cluster-community-server
+  environment:
+    DEBIAN_FRONTEND: noninteractive
+    
+#TODO: change root password
+
+
   

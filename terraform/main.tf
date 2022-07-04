@@ -41,6 +41,7 @@ resource "proxmox_lxc" "nginx" {
     memory       = 2048
     cores        = 2
     start        = true
+    unprivileged = true #needed if nesting
     password     = var.pass
     ssh_public_keys = file("id_rsa.keys")
 
@@ -83,6 +84,7 @@ resource "proxmox_lxc" "db01" {
     memory       = 2048
     cores        = 2
     start        = true
+    unprivileged = true
     password     = var.pass
     ssh_public_keys = file("id_rsa.keys")
 

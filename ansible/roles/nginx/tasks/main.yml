@@ -14,4 +14,4 @@
 - name: prepare for certbot
   shell: mkdir -p /var/www/html/.well-known/acme-challenge/
 - name: configure certbot
-  shell: certbot --test-cert --nginx -d bms-devops.ru --register-unsafely-without-email -n --agree-tos
+  shell: certbot --test-cert --nginx -d test.bms-devops.ru -d bms-devops.ru -d www.bms-devops.ru -d gitlab.bms-devops.ru -d grafana.bms-devops.ru -d prometheus.bms-devops.ru -d alertmanager.bms-devops.ru --register-unsafely-without-email -n --agree-tos
