@@ -44,9 +44,15 @@ Run `make apply` for terraform and ansible
 Так что имя машины тащим через всё
 
 1. В файле `terraform/main.tf` прописать новый модуль.
-2. В каталоге `ansible/` создать `<host_name>.yml`
-3. В файле `ansible/inveintory/hosts` в раздел `[nodes]` прописать `host_name`
-с указанием IP, как и в `main.tf` **(TODO: скрипт автообновления hosts???)**
+2. Запустить `make init`, иначе терраформ не желает с новыми модулями работать
+3. В файле `ansible/inveintory/hosts` в раздел `nodes` прописать `host_name`
+с указанием IP, как и в `main.tf` 
+4. В каталоге `ansible/` создать `<host_name>.yml`
+5. В каталоге `ansible/roles` создать роль `ansible-galaxy init <role-name>`
+5. Запустить `make apply`
+**Пунты 3, 4, 5 могут выполняться в автоматическом режиме.**
+**Если роль существует после `make init` можно юзать `make apply`**
+**Если нет, то создастся пустой шаблон выбранной роли**
 
 
 

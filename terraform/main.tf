@@ -23,23 +23,25 @@ provider "proxmox" {
 
 /*
 module "nginx" {
-    vmid = 100
+    vmid = 100 # same as host IP
     source = "./bms-devops"
     hostname = "nginx"
+    role = "nginx" #for ansible checker
 }
 */
 
 module "db01" {
-    vmid = 101 #same IP
+    vmid = 101
     source = "./bms-devops"
     host_name = "db01"
-    role = "mysql"
+    role = "mysql" 
 }
 
-/*
+///*
 module "db02" {
     vmid = 102 
     source = "./bms-devops"
     host_name = "db02"
+    role = "mysql"     
 }
-*/
+//*/
