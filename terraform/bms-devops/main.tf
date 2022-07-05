@@ -33,7 +33,7 @@ resource "proxmox_lxc" "bms" {
     }
 
     provisioner "local-exec" {
-        command = "make -C $IAAC_ROOT play ${var.host_name}.yml"    
+        command = "make -C $IAAC_ROOT ans-check-and-play ${var.host_name}.yml"    
     }
 
 }

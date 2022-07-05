@@ -6,7 +6,7 @@ import dotenv #this sux, drop it
 print('Setting UP .env file')
 
 
-#prepare regular expressions
+#dynamic and static variables for .env
 d = {
     'PM_API_TOKEN_ID': '',
     'PM_API_TOKEN_SECRET': '',

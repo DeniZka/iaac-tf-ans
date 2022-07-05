@@ -21,4 +21,6 @@ variable "host_name" {}
 variable "memory" { default = 2048 }
 variable "cores" { default = 2 }
 
+variable "provision_role" { default = "nginx" }
+
 

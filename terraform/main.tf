@@ -33,6 +33,7 @@ module "db01" {
     vmid = 101 #same IP
     source = "./bms-devops"
     host_name = "db01"
+    provision_role = "mysql"
 }
 
 /*

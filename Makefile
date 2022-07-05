@@ -13,8 +13,16 @@ export $(shell sed 's/=.*//' ./script/.env)
 # If the first argument is "run"...
 ifeq (play,$(firstword $(MAKECMDGOALS)))
   # use the rest as arguments for "run"
-  RUN_ARGS := $(wordlist 2,$(words $(MAKECMDGOALS)),$(MAKECMDGOALS))
+  HOST_NAME := $(word 2,$(MAKECMDGOALS))
   # ...and turn them into do-nothing targets
+  $(eval $(HOST_NAME):;@:)
+endif
+
+#parse args if ans-check presents
+ifeq (ans-check,$(findstring ans-check,$(firstword $(MAKECMDGOALS))))
+  RUN_ARGS := $(wordlist 2,$(words $(MAKECMDGOALS)),$(MAKECMDGOALS))
+  HOST_NAME := $(word 2,$(MAKECMDGOALS))
+  $(eval $(HOST_NAME):;@:)
   $(eval $(RUN_ARGS):;@:)
 endif
 
@@ -58,9 +66,17 @@ init:
 apply: 
     #nginx-distro
 	terraform -chdir=$(tf) apply
-
+	
 play:
-	ansible-playbook $(ANSIBLE_PLAYBOOK_DIR)/$(RUN_ARGS)
+	ansible-playbook $(ANSIBLE_PLAYBOOK_DIR)/$(HOST_NAME)
+
+#warning ans-check is keyword for args parsing	
+ans-check:
+#	./script/ans-chek-role.py $(ARG1) $(ARG2) $(ARG3)
+	echo $(HOST_NAME)	
+	
+#warning ans-check is keyword for args parsing		
+ans-check-and-play: ans-check play
 
 destroy:
 	terraform -chdir=$(tf) destroy
