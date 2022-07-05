@@ -39,6 +39,17 @@
 
 - name: restart mysql
   shell: systemctl restart mysql
+  
+- name: sql
+  mysql_user:
+    state: present
+    host: "172.16.0.102" #db02 user
+    name: "wordpress"
+    password: "wordpress"
+    priv: "*.*:REPLICATION SLAVE"
+    
+
+#https://github.com/geerlingguy/ansible-role-mysql/blob/master/tasks/replication.yml
 
 #TODO: execute SQL SETUP user password & replication  
   

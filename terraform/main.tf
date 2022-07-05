@@ -37,11 +37,11 @@ module "db01" {
     role = "mysql" 
 }
 
-///*
+/*
 module "db02" {
     vmid = 102 
     source = "./bms-devops"
     host_name = "db02"
     role = "mysql"     
 }
-//*/
+*/
