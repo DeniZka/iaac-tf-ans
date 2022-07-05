@@ -9,7 +9,18 @@ export $(shell sed 's/=.*//' ./script/.env)
 #	include ./script/.env
 #	export
 #endif
-test:
+
+# If the first argument is "run"...
+ifeq (play,$(firstword $(MAKECMDGOALS)))
+  # use the rest as arguments for "run"
+  RUN_ARGS := $(wordlist 2,$(words $(MAKECMDGOALS)),$(MAKECMDGOALS))
+  # ...and turn them into do-nothing targets
+  $(eval $(RUN_ARGS):;@:)
+endif
+
+
+
+env:
 	env
 #test env reading
 print:
@@ -40,10 +51,16 @@ configure-id-rsa-pub:
 
 configure-mysql:
 	./script/mysql-get-last-repo.sh
+	
+init:
+	terraform -chdir=$(tf) init
 
 apply: 
     #nginx-distro
 	terraform -chdir=$(tf) apply
+
+play:
+	ansible-playbook $(ANSIBLE_PLAYBOOK_DIR)/$(RUN_ARGS)
 
 destroy:
 	terraform -chdir=$(tf) destroy
