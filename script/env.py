@@ -10,7 +10,7 @@ print('Setting UP .env file')
 d = {
     'PM_API_TOKEN_ID': '',
     'PM_API_TOKEN_SECRET': '',
-    'ANSIBLE_INVENTORY': os.getcwd() + '/ansible/inventory/hosts',
+    'ANSIBLE_INVENTORY': os.getcwd() + '/ansible/inventory/hosts.yml',
     'ANSIBLE_HOST_KEY_CHECKING': 'False',
     'ANSIBLE_TIMEOUT': 40,
     'ANSIBLE_ROLES_PATH': os.getcwd() + '/ansible/roles',

@@ -72,8 +72,8 @@ play:
 
 #warning ans-check is keyword for args parsing	
 ans-check:
-#	./script/ans-chek-role.py $(ARG1) $(ARG2) $(ARG3)
-	echo $(HOST_NAME)	
+	./script/ans-check.py $(RUN_ARGS)
+	#echo $(HOST_NAME)	
 	
 #warning ans-check is keyword for args parsing		
 ans-check-and-play: ans-check play
