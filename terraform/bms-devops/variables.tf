@@ -1,3 +1,4 @@
+//
 variable "pass" {
   type        = string
   default     = "$6$5Gxkjto7LXjCQCgy$oX4nsM/mJYyrHTTPatXPWeEu.gGu8FCA5Nb8pq6NxkYlUp8IiY2W.Gy7pygr4kNIViy4V.vzoZ.x5X.JNOqiq/"
@@ -17,5 +18,7 @@ variable "vmid" {
 
 variable "host_name" {}
 
+variable "memory" { default = 2048 }
+variable "cores" { default = 2 }
 
 
