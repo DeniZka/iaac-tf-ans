@@ -1,27 +1,41 @@
 ---
 # tasks file for mysql
+#some MySQL FAQ
+#https://www.youtube.com/watch?v=RkbIqbXCWqI master-slave, master-master config
+#https://github.com/geerlingguy/ansible-role-mysql/blob/master/tasks/replication.yml
+
+#--------mysql setup-------------
+
+- debug:
+    msg: "{{ ansible_hostname }}"
+
+- name: Get package facts
+  package_facts:
+    manager: apt
+
 - name: prepare for mysql installation
   apt:
     pkg:
       - gnupg
       - lsb-release
-      
+      - python3-pymysql
+  #no when needed
+           
 - name: download last release
   shell: wget https://dev.mysql.com/get/{{ mysql_last_repo_deb }}
+  when: '"mysql-apt-config" not in ansible_facts.packages'
 
 - name: install downloaded deb
   apt:
     deb: ./{{ mysql_last_repo_deb }}
   environment:
     DEBIAN_FRONTEND: noninteractive
+  when: "'mysql-apt-config' not in ansible_facts.packages"
 
-#seems no cluster needed, just replication
-#- name: reconfigure to cluster
-#  shell: sed -i 's/-[0-9]\+\.[0-9]\+/-cluster\0/g' /etc/apt/sources.list.d/mysql.list
-  
 - name: update apt
   shell: apt update
-  
+  when: "'mysql-apt-config' not in ansible_facts.packages"
+   
 - name: install mysql server
   apt:
     pkg: mysql-community-server
@@ -29,32 +43,94 @@
     #mysql-cluster-community-server
   environment:
     DEBIAN_FRONTEND: noninteractive
+  when: "'mysql-community-server' not in ansible_facts.packages"
+  
+- name: check mysql config present
+  stat:
+    path: /etc/mysql/mysql.conf.d/mysqld_.cnf
+  register: cnf_file
     
 #pick master of slave config
-- name: add mysqld {{ db_kind }} config
+- name: add mysqld master config
   copy: 
-    src: mysqld_{{ db_kind }}.cnf
-    dest: /etc/mysql/mysql.conf.d/mysql.cnf
-  #when: db_kind == "master"  
+    src: mysqld_master.cnf
+    dest: /etc/mysql/mysql.conf.d/mysqld_.cnf
+  when: 
+    - not cnf_file.stat.exists
+    - ansible_hostname == 'db01'
+    
+- name: add mysqld slave config
+  copy: 
+    src: mysqld_slave.cnf
+    dest: /etc/mysql/mysql.conf.d/mysqld_.cnf
+  when: 
+    - not cnf_file.stat.exists
+    - ansible_hostname == 'db02'
 
 - name: restart mysql
   shell: systemctl restart mysql
+  when: not cnf_file.stat.exists
   
-- name: sql
+#-----------user setup-----------------------------
+  
+- name: sql master - create user and grant replication
   mysql_user:
+    login_unix_socket: /var/run/mysqld/mysqld.sock
     state: present
-    host: "172.16.0.102" #db02 user
+    host: "%" #172.16.0.102 from db02
     name: "wordpress"
     password: "wordpress"
-    priv: "*.*:REPLICATION SLAVE"
+    priv: "*.*:ALL" #REPLICATION SLAVE
+  when: ansible_hostname == 'db01'
+
+#---------------replication setup------------------------------    
     
+- name: sql master - replication status
+  mysql_replication: 
+    login_unix_socket: /var/run/mysqld/mysqld.sock
+    mode: getmaster
+  delegate_to: "db01" #run this task only on db01 ??
+  register: primary
+  when: ansible_hostname == 'db01'
+      
+       
+#- name: sql slave - replication status
+#  mysql_replication:
+#    login_unix_socket: /var/run/mysqld/mysqld.sock
+#    mode: getslave
+#  register: slave
+#  when: db_kind == 'slave'
 
-#https://github.com/geerlingguy/ansible-role-mysql/blob/master/tasks/replication.yml
+#check another host vars
+#- debug:
+#    msg: "{{ hostvars['db01'].primary.File }}"
 
-#TODO: execute SQL SETUP user password & replication  
+  #FIXME: registered primary not works when runnin separately
+- name: sql slave - set master  
+  mysql_replication:
+    login_unix_socket: /var/run/mysqld/mysqld.sock
+    mode: changemaster 
+    master_host: '172.16.0.101'
+    master_user: 'wordpress'
+    master_password: 'wordpress'
+    master_log_file: "{{ hostvars['db01'].primary.File }}"
+    master_log_pos:  "{{ hostvars['db01'].primary.Position }}"    
+  when: ansible_hostname == 'db02'
+
+- name: sql slave - start replcation
+  mysql_replication: 
+    mode: startslave
+    login_unix_socket: /var/run/mysqld/mysqld.sock
+  when: ansible_hostname == 'db02'
   
-#TODO: change root password
-#https://www.youtube.com/watch?v=RkbIqbXCWqI master-slave, master-master config
+#----------database setup -----------------
+
+- name: sql master - create db
+  mysql_db:
+    login_unix_socket: /var/run/mysqld/mysqld.sock
+    name: 'wordpress'
+  register: created
+  when: ansible_hostname == 'db01'
 
 
   

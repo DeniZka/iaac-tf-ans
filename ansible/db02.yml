@@ -1,4 +1,6 @@
-- hosts: db02
+- hosts: 
+  - db01
+  - db02
   vars:
     db_kind: slave
   roles:

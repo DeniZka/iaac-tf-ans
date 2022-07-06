@@ -1,5 +1,9 @@
-- hosts: db01
-  vars:
-    db_kind: master
-  roles: 
-  - mysql
+#skip
+#every configurations are in db02.yml
+#cause of slave db02 need to be born latter then db01
+
+- hosts: none
+#  vars:
+#    db_kind: master
+#  roles: 
+#  - mysql
