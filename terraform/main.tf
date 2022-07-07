@@ -21,7 +21,7 @@ provider "proxmox" {
 
 }
 
-/*
+//*
 module "nginx" {
     vmid = 100 # same as host IP
     source = "./bms-devops"
@@ -30,14 +30,16 @@ module "nginx" {
 }
 //*/
 
+//*
 module "db01" {
     vmid = 101
     source = "./bms-devops"
     host_name = "db01"
     role = "mysql" 
 }
+//*/
 
-///*
+//*
 module "db02" {
     depends_on = [module.db01]
     vmid = 102 
@@ -46,3 +48,17 @@ module "db02" {
     role = "mysql"     
 }
 //*/
+
+//*
+module "app" {
+    #cause of uses mysql db and when replication is done
+    depends_on = [module.db02] 
+    
+    vmid = 103
+    source = "./bms-devops"
+    host_name = "app"
+    role = "wordpress"     
+}
+//*/
+
+
