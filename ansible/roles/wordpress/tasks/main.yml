@@ -20,14 +20,9 @@
     dest: /etc/apache2/sites-available/wp.conf
   when: not conf_file.stat.exists
   
-- name: check wp enabled
-  stat:
-    path: /etc/apache2/sites-available/wp.conf
-  register: wp_en
-  
 - name: disable & enable sites
   shell: a2dissite 000-default && a2ensite wp
-  when: not wp_en.stat.exists 
+  when: not conf_file.stat.exists 
   
 #-----------configure wordpress------------
 
@@ -40,7 +35,7 @@
   systemd:
     name: apache2
     state: reloaded
-  when: not wp_en.stat.exists
+  when: not conf_file.stat.exists
 
 
 
