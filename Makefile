@@ -74,6 +74,12 @@ play:
 #show what playbook can we play
 play-list:
 	ls $(ANSIBLE_PLAYBOOK_DIR) | grep .yml
+list: play-list
+
+#usage 'make list' to know available hosts 'make ssh <host>'
+ssh:
+	./script/hosts_ip.py
+#ssh -o UserKnownHostsFile=/dev/null -o ProxyCommand="ssh -p 22 -W %h:%p -q root@bms-devops.ru"
 
 #warning ans-check is keyword for args parsing	
 ans-check:
