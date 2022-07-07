@@ -67,8 +67,13 @@ apply:
     #nginx-distro
 	terraform -chdir=$(tf) apply
 	
+#play certain playbook
 play:
 	ansible-playbook $(ANSIBLE_PLAYBOOK_DIR)/$(HOST_NAME)
+	
+#show what playbook can we play
+play-list:
+	ls $(ANSIBLE_PLAYBOOK_DIR) | grep .yml
 
 #warning ans-check is keyword for args parsing	
 ans-check:

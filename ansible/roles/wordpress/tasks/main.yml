@@ -24,6 +24,7 @@
     - unzip 
     - wget 
     - git
+    - prometheus-node-exporter
     
 #----------------configure apache-----------------
     

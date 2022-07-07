@@ -19,6 +19,7 @@
       - gnupg
       - lsb-release
       - python3-pymysql
+      - prometheus-node-exporter
   #no when needed
            
 - name: download last release

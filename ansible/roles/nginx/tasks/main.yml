@@ -8,6 +8,7 @@
       - python3-certbot-nginx
       - python3-acme
       - python3-certbot
+      - prometheus-node-exporter
     state: latest
 - name: prepare nginx
   shell: sed -i 's/_;/bms-devops.ru;/g' /etc/nginx/sites-available/default

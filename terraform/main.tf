@@ -61,4 +61,11 @@ module "app" {
 }
 //*/
 
-
+//*
+module "gitlab" {
+    vmid = 104
+    source = "./bms-devops"
+    host_name = "gitlab"
+    role = "gitlab"     
+}
+//*/

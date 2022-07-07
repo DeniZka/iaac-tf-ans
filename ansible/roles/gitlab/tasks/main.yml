@@ -1,0 +1,22 @@
+---
+# tasks file for gitlab
+- name: install packages
+  apt:
+    pkg:
+    - curl
+    - ca-certificates
+    - apt-transport-https
+    - gnupg2
+    
+- name: get and install
+  shell: curl -s https://packages.gitlab.com/install/repositories/gitlab/gitlab-ce/script.deb.sh | bash
+
+- name: apt update
+  apt:
+    update_cache: yes
+
+- name: install gitlab-ce
+  apt:
+    pkg: gitlab-ce
+    
+
