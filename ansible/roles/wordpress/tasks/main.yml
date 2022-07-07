@@ -1,23 +1,41 @@
 ---
 # tasks file for wordpress
+#https://wiki.debian.org/WordPress
+#https://wordpress.org/support/article/how-to-install-wordpress/
 
 #---------------install--------------
 
 - name: install wordpress
   apt:
-    pkg: wordpress
+    pkg: 
+    - wordpress
+    - php 
+    - libapache2-mod-php 
+    - php-pear 
+    - php-cgi 
+    - php-common 
+    - php-mbstring 
+    - php-zip 
+    - php-net-socket 
+    - php-gd 
+    - php-xml-util 
+    - php-mysql 
+    - php-bcmath 
+    - unzip 
+    - wget 
+    - git
     
 #----------------configure apache-----------------
     
-- name: check wordpress config
+- name: check apache wordpress config
   stat:
     path: /etc/apache2/sites-available/wp.conf
   register: conf_file
     
-- name: add wordpress config
+- name: add apache2 wordpress config
   copy: 
     src: wp.conf
-    dest: /etc/apache2/sites-available/wp.conf
+    dest: /etc/apache2/sites-available/
   when: not conf_file.stat.exists
   
 - name: disable & enable sites
@@ -26,7 +44,19 @@
   
 #-----------configure wordpress------------
 
-#- name: confugre wordpress
+- name: check wordpress php config
+  stat:
+    path: /etc/wordpress/config-www.bms-devops.ru.php
+  register: php_file
+  
+- name: add wordpress php config
+  copy:
+    src: config-www.bms-devops.ru.php
+    dest: /etc/wordpress/
+    
+- debug:
+    msg: 'now you can open browser http://www.bms-devops.ru/wp-admin'
+    
 
   
 #---------------run---------------------
