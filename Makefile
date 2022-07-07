@@ -18,6 +18,13 @@ ifeq (play,$(firstword $(MAKECMDGOALS)))
   $(eval $(HOST_NAME):;@:)
 endif
 
+ifeq (ssh,$(firstword $(MAKECMDGOALS)))
+  # use the rest as arguments for "run"
+  RUN_ARGS := $(word 2,$(MAKECMDGOALS))
+  # ...and turn them into do-nothing targets
+  $(eval $(RUN_ARGS):;@:)
+endif
+
 #parse args if ans-check presents
 ifeq (ans-check,$(findstring ans-check,$(firstword $(MAKECMDGOALS))))
   RUN_ARGS := $(wordlist 2,$(words $(MAKECMDGOALS)),$(MAKECMDGOALS))
@@ -76,9 +83,9 @@ play-list:
 	ls $(ANSIBLE_PLAYBOOK_DIR) | grep .yml
 list: play-list
 
-#usage 'make list' to know available hosts 'make ssh <host>'
+#usage make ssh, or make ssh IP or make ssh id.  IP - last digits
 ssh:
-	./script/hosts_ip.py
+	./script/hosts_ip.py $(RUN_ARGS)
 #ssh -o UserKnownHostsFile=/dev/null -o ProxyCommand="ssh -p 22 -W %h:%p -q root@bms-devops.ru"
 
 #warning ans-check is keyword for args parsing	
