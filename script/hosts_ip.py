@@ -9,7 +9,7 @@ def interact_host(lst, last_ch):
 
 id_or_host_or_ip = ''
 if len(sys.argv) > 1:
- id_or_host_or_ip = sys.argv[1]
+  id_or_host_or_ip = sys.argv[1]
 
 #read env variables
 playbook_dir = os.environ['ANSIBLE_PLAYBOOK_DIR']

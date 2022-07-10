@@ -76,7 +76,8 @@ apply:
 	
 #play certain playbook
 play:
-	ansible-playbook $(ANSIBLE_PLAYBOOK_DIR)/$(HOST_NAME)
+	./script/ans-play.py $(HOST_NAME)
+	#ansible-playbook $(ANSIBLE_PLAYBOOK_DIR)/$(HOST_NAME)
 	
 #show what playbook can we play
 play-list:
