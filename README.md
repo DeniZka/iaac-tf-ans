@@ -1,5 +1,6 @@
 # iaac-tf-ans
-Terraform &amp; Ansible infrastucture
+[Terraform &amp; Ansible infrastucture](https://github.com/olegbukatchuk/devops-diplom-yandexcloud)
+
 
 ### requiered packages
 1. [ansible](https://docs.ansible.com/ansible/latest/installation_guide/installation_distros.html)
@@ -10,6 +11,12 @@ Run `make configure` to prepare environment
 
 ### apply IaaC
 Run `make apply` for terraform and ansible
+
+### run playbooks only
+Run `make play` for interactive ansible-playbook tool 
+
+### ssh connect only
+Run `make ssh` for interactive ssh tool
 
 
 ### Как эта "шляпа" устроена
