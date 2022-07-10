@@ -1,0 +1,45 @@
+#rest of sites, this file to be destroy, when all in game
+
+server {
+	root /var/www/html;
+	index index.html index.htm index.nginx-debian.html;
+	server_name grafana.bms-devops.ru alertmanager.bms-devops.ru prometheus.bms-devops.ru gitlab.bms-devops.ru; # managed by Certbot
+
+	location / {
+		try_files $uri $uri/ =404;
+	}
+
+	listen [::]:443 ssl ; # managed by Certbot
+	listen 443 ssl; # managed by Certbot
+	ssl_certificate /etc/letsencrypt/live/bms-devops.ru/fullchain.pem; # managed by Certbot
+	ssl_certificate_key /etc/letsencrypt/live/bms-devops.ru/privkey.pem; # managed by Certbot
+	include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
+	ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
+}
+
+server {
+    if ($host = alertmanager.bms-devops.ru) {
+        return 301 https://$host$request_uri;
+    } # managed by Certbot
+
+
+    if ($host = prometheus.bms-devops.ru) {
+        return 301 https://$host$request_uri;
+    } # managed by Certbot
+
+
+    if ($host = grafana.bms-devops.ru) {
+        return 301 https://$host$request_uri;
+    } # managed by Certbot
+
+
+    if ($host = gitlab.bms-devops.ru) {
+        return 301 https://$host$request_uri;
+    } # managed by Certbot
+
+    listen 80 ;
+    listen [::]:80 ;
+    server_name grafana.bms-devops.ru alertmanager.bms-devops.ru prometheus.bms-devops.ru gitlab.bms-devops.ru;
+    return 404; # managed by Certbot
+}
+

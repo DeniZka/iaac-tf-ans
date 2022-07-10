@@ -10,11 +10,54 @@
       - python3-certbot
       - prometheus-node-exporter
     state: latest
-- name: prepare nginx
-  shell: sed -i 's/_;/bms-devops.ru;/g' /etc/nginx/sites-available/default
+
+- name: check default site exists
+  stat:
+    path: /etc/nginx/sites-enabled/default
+  register: def_site
+ 
+- name: remove default site
+  file:
+    path: /etc/nginx/sites-enabled/default
+    state: absent
+  when: def_site.stat.exists
+
+- name: copy configs
+  copy:
+    src: ./
+    dest: /etc/nginx/sites-available/
+
+- name: Find .site files
+  find:
+    paths: /etc/nginx/sites-available/
+    file_type: file
+    recurse: Yes
+    patterns: "*.site"
+  register: files_matched
+      
+#- debug:
+#    msg: "{{ item.path }}"
+#  loop: "{{ files_matched.files | flatten(levels=1) }}"
+      
+- name: enable sites
+  file: 
+    src: "{{ item.path }}"
+    dest: /etc/nginx/sites-enabled/{{ item.path | basename }}
+    state: link
+  loop: "{{ files_matched.files }}"  
+  
+- name: restart nginx
+  systemd:
+    name: nginx
+    state: reloaded    
+    
 - name: prepare for certbot
-  shell: mkdir -p /var/www/html/.well-known/acme-challenge/
+  file:
+    path: /var/www/html/.well-known/acme-challenge/
+    state: directory
+    
 - name: configure certbot
   shell: certbot --test-cert --nginx -d bms-devops.ru -d www.bms-devops.ru -d gitlab.bms-devops.ru -d grafana.bms-devops.ru -d prometheus.bms-devops.ru -d alertmanager.bms-devops.ru --register-unsafely-without-email -n --agree-tos
   
 #-d test.bms-devops.ru
+

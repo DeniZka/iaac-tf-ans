@@ -1,0 +1,27 @@
+server {
+	root /var/www/html;
+	index index.html index.htm index.nginx-debian.html;
+	server_name bms-devops.ru;
+	location / {
+		try_files $uri $uri/ =404;
+	}
+	listen [::]:443 ssl ipv6only=on; # managed by Certbot
+	listen 443 ssl; # managed by Certbot
+	ssl_certificate /etc/letsencrypt/live/bms-devops.ru/fullchain.pem; # managed by Certbot
+	ssl_certificate_key /etc/letsencrypt/live/bms-devops.ru/privkey.pem; # managed by Certbot
+	include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
+	ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
+}
+
+server {
+	if ($host = bms-devops.ru) {
+		return 301 https://$host$request_uri;
+	} # managed by Certbot
+
+        listen 80 default_server;
+	listen [::]:80 default_server;
+	
+	server_name bms-devops.ru;
+	return 404; # managed by Certbot
+}
+
