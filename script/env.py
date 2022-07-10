@@ -15,7 +15,7 @@ d = {
     'ANSIBLE_TIMEOUT': 40,
     'ANSIBLE_ROLES_PATH': os.getcwd() + '/ansible/roles',
     'ANSIBLE_PLAYBOOK_DIR': os.getcwd() + '/ansible',
-    'IAAC_ROOT': os.getcwd()
+    'IAAC_ROOT': os.getcwd(),
     'SCRIPT_SSH_LAST_CHOSEN': '0'
 }
 
