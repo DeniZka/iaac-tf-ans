@@ -55,8 +55,8 @@
     state: directory
     
 #works with default file    
-#- name: configure certbot
-#  shell: certbot --test-cert --nginx -d bms-devops.ru -d {{ sites | join('.bms-devops.ru -d ' ) }}.bms-devops.ru --register-unsafely-without-email -n --agree-tos
+- name: configure certbot
+  shell: certbot --test-cert --nginx -d bms-devops.ru -d {{ sites | join('.bms-devops.ru -d ' ) }}.bms-devops.ru --register-unsafely-without-email -n --agree-tos
   
 #default site play again  
 - name: check default site exists
