@@ -9,15 +9,8 @@ password = 'bms-devops'
 domain = 'bms-devops.ru'
 #NOTE: update_records is only resellers function
 
-#TODO: read argv with subnames
-#arg = sys.argv[1]
-arg = 'www:gitlab:grafana:alertmanager:hello:prometheus'.split(':')
-print(arg)
-exit()
-
-
-subnames = ['www', 'gitlab', 'grafana', 'alertmanager', 'hello', 'prometheus']
-arg = sys.argv[1]
+#subnames = ['www', 'gitlab', 'grafana', 'alertmanager', 'hello', 'prometheus']
+subnames = sys.argv[1].split(':')
 
 #check dns
 d = {
@@ -38,7 +31,7 @@ if r.status_code != 200:
   print('bye')
   exit()
 
-print(r.text)
+#print(r.text)
 
 #connection success
 #check status
@@ -65,8 +58,6 @@ for sn in subnames:
     action_list.append({'action':'add_cname', 'subdomain':sn, 'canonical_name': domain})
 print('will be added:', to_add)
 
-
-
 to_remove = []
 for sn in exists:
   if not sn in subnames:
@@ -74,7 +65,6 @@ for sn in exists:
     #action_list.appen({})
 print('will be removed:', to_remove)   
   
-
 print('starting')
 #ADD RECORDS
 for sn in to_add:
@@ -111,9 +101,4 @@ for sn in to_remove:
   r = requests.post('https://api.reg.ru/api/regru2/zone/remove_record?input_data='+jd+'&input_format=json')
   print(r.status_code)
   print(r.text)  
-
-
-
-
-
 

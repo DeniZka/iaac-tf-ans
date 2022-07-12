@@ -1,3 +1,13 @@
 ---
 # vars file for nginx
 #db_kind: master
+sites:
+- www
+- gitlab
+- grafana
+- alertmanager
+- prometheus
+- test
+
+en_dir: /etc/nginx/sites-enabled
+aval_dir: /etc/nginx/sites-available

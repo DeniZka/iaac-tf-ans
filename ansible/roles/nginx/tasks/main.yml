@@ -1,5 +1,19 @@
 ---
 # tasks file for nginx
+#- name: stop
+#  debug: 
+#    msg: "hello -d {{ sites | join('.bms-devops.ru -d ' ) }}.bms-devops.ru bye"
+
+#- meta: end_play
+
+- name: copy script
+  copy:
+    src: script/reg_ru.py
+    dest: .
+
+- name: register reg ru
+  command: /usr/bin/python3 reg_ru.py {{ sites | join(':') }}
+
 - name: install nginx
   apt:
     pkg:
@@ -9,27 +23,62 @@
       - python3-acme
       - python3-certbot
       - prometheus-node-exporter
-    state: latest
+    state: latest 
+     
+- name: ensure there is no prevous nginx.site     
+  file:
+    path: "{{ en_dir }}/nginx.site"
+    state: absent
+     
+#turn back default site if its not
+- name: check defautl exists
+  stat:
+    path: "{{ en_dir }}/default"
+  register: def_file
+  
+- name: link default
+  file: 
+    src: "{{ aval_dir }}/default"
+    dest: "{{ en_dir }}/default"
+    state: link
+  when: not def_file.stat.exists
 
+- name: restart nginx if was no default
+  systemd:
+    name: nginx
+    state: reloaded   
+  when: not def_file.stat.exists
+       
+- name: prepare for certbot
+  file:
+    path: /var/www/html/.well-known/acme-challenge/
+    state: directory
+    
+#works with default file    
+#- name: configure certbot
+#  shell: certbot --test-cert --nginx -d bms-devops.ru -d {{ sites | join('.bms-devops.ru -d ' ) }}.bms-devops.ru --register-unsafely-without-email -n --agree-tos
+  
+#default site play again  
 - name: check default site exists
   stat:
-    path: /etc/nginx/sites-enabled/default
+    path: "{{ en_dir }}/default"
   register: def_site
  
 - name: remove default site
   file:
-    path: /etc/nginx/sites-enabled/default
+    path: "{{ en_dir }}/default"
     state: absent
   when: def_site.stat.exists
+#--default-done--
 
 - name: copy configs
   copy:
-    src: ./
-    dest: /etc/nginx/sites-available/
+    src: ./sites/
+    dest: "{{ aval_dir }}/"
 
 - name: Find .site files
   find:
-    paths: /etc/nginx/sites-available/
+    paths: "{{ aval_dir }}/"
     file_type: file
     recurse: Yes
     patterns: "*.site"
@@ -42,22 +91,11 @@
 - name: enable sites
   file: 
     src: "{{ item.path }}"
-    dest: /etc/nginx/sites-enabled/{{ item.path | basename }}
+    dest: "{{ en_dir }}/{{ item.path | basename }}"
     state: link
-  loop: "{{ files_matched.files }}"  
-  
+  loop: "{{ files_matched.files }}"       
+
 - name: restart nginx
   systemd:
     name: nginx
-    state: reloaded    
-    
-- name: prepare for certbot
-  file:
-    path: /var/www/html/.well-known/acme-challenge/
-    state: directory
-    
-- name: configure certbot
-  shell: certbot --test-cert --nginx -d bms-devops.ru -d www.bms-devops.ru -d gitlab.bms-devops.ru -d grafana.bms-devops.ru -d prometheus.bms-devops.ru -d alertmanager.bms-devops.ru --register-unsafely-without-email -n --agree-tos
-  
-#-d test.bms-devops.ru
-
+    state: reloaded  

@@ -32,7 +32,7 @@ if not sel:
 
 if sel != last_ch:
   print(sel)
-  os.system('sed -ri \'s/SCRIPT_PLAY_LAST_CHOSEN=[[:digit:]]+/SCRIPT_PLAY_LAST_CHOSEN=' + pl[int(sel)] + '/\' script/.env')
+  os.system('sed -ri \'s/SCRIPT_PLAY_LAST_CHOSEN=[[:digit:]]+/SCRIPT_PLAY_LAST_CHOSEN=' + sel + '/\' script/.env')
 os.system('ansible-playbook ' + os.path.join(pbdir, pl[int(sel)]))
 
 
