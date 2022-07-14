@@ -19,4 +19,19 @@
   apt:
     pkg: gitlab-ce
     
+#TODO: copy preconfigured config with prometheus and either
+- name: modify config file
+  shell: sed -i "s/external_url 'http:\/\/gitlab.example.com'/external_url 'http:\/\/gitlab.bms-devops.ru'/g" /etc/gitlab/gitlab.rb
+  
+- name: gitlab reconfigure
+  shell: gitlab-ctl reconfigure
+  
+- name: gathering password
+  fetch:
+    src: /etc/gitlab/initial_root_password
+    dest: /tmp/
+    
+- debug:
+    msg: 'gitlab temp password now int /tmp/initial_root_password'
+    
 

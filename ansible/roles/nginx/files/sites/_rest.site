@@ -3,7 +3,7 @@
 server {
 	root /var/www/html;
 	index index.html index.htm index.nginx-debian.html;
-	server_name grafana.bms-devops.ru alertmanager.bms-devops.ru prometheus.bms-devops.ru gitlab.bms-devops.ru; # managed by Certbot
+	server_name grafana.bms-devops.ru alertmanager.bms-devops.ru prometheus.bms-devops.ru; # managed by Certbot
 
 	location / {
 		try_files $uri $uri/ =404;
@@ -33,13 +33,9 @@ server {
     } # managed by Certbot
 
 
-    if ($host = gitlab.bms-devops.ru) {
-        return 301 https://$host$request_uri;
-    } # managed by Certbot
-
     listen 80 ;
     listen [::]:80 ;
-    server_name grafana.bms-devops.ru alertmanager.bms-devops.ru prometheus.bms-devops.ru gitlab.bms-devops.ru;
+    server_name grafana.bms-devops.ru alertmanager.bms-devops.ru prometheus.bms-devops.ru;
     return 404; # managed by Certbot
 }
 
