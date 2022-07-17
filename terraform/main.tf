@@ -6,6 +6,17 @@ terraform {
       version = ">=2.9.10"
     }
   }
+  
+  backend "s3" {
+    bucket = "rock-n-roll"
+    key    = "rock-n-roll.tfstate"
+    region = "us-east-1"
+    access_key = "access_key"
+    secret_key = "secret_key"
+    endpoint = "http://bms-devops.ru:9000"
+    skip_credentials_validation = true
+    force_path_style = true
+  }
 }
 
 provider "proxmox" {
@@ -21,7 +32,7 @@ provider "proxmox" {
 
 }
 
-//*
+/*
 module "nginx" {
     vmid = 100 # same as host IP
     source = "./bms-devops"
@@ -30,7 +41,7 @@ module "nginx" {
 }
 //*/
 
-//*
+/*
 module "db01" {
     vmid = 101
     source = "./bms-devops"
@@ -39,7 +50,7 @@ module "db01" {
 }
 //*/
 
-//*
+/*
 module "db02" {
     depends_on = [module.db01]
     vmid = 102 
@@ -49,7 +60,7 @@ module "db02" {
 }
 //*/
 
-//*
+/*
 module "app" {
     #cause of uses mysql db and when replication is done
     depends_on = [module.db02] 
